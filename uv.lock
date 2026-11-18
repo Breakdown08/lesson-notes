@@ -914,6 +914,7 @@ dependencies = [
     { name = "langchain-core" },
     { name = "langchain-xai" },
     { name = "langgraph" },
+    { name = "numpy" },
     { name = "python-dotenv" },
 ]
 
@@ -933,6 +934,7 @@ requires-dist = [
     { name = "langchain-core", specifier = ">=1.8,<2" },
     { name = "langchain-xai", specifier = ">=1.4,<2" },
     { name = "langgraph", specifier = ">=1.2,<2" },
+    { name = "numpy", specifier = ">=2" },
     { name = "python-dotenv", specifier = ">=1.0" },
 ]
 

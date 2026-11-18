@@ -1,5 +1,8 @@
+import wave
 from pathlib import Path
 from typing import Any, Final, Protocol
+
+import numpy as np
 
 from lesson_notes.model import Segment
 
@@ -9,6 +12,20 @@ class Transcriber(Protocol):
 
 
 INITIAL_PROMPT: Final[str] = "Bonjour, ça va ? Привет, как дела? Aujourd'hui мы учим le passé composé."
+
+
+def read_wav(path: Path) -> np.ndarray:
+    """Read a 16-bit mono 16 kHz WAV into float32 samples in [-1, 1].
+
+    faster-whisper gets samples, not a path: its own decoder passes PyAV an argument
+    that PyAV 19 rejects (`metadata_errors`), and the track is already a 16 kHz WAV.
+    """
+    wav: wave.Wave_read
+    with wave.open(str(path), "rb") as wav:
+        if wav.getnchannels() != 1 or wav.getsampwidth() != 2 or wav.getframerate() != 16000:
+            raise ValueError(f"{path}: expected 16-bit mono 16 kHz WAV")
+        frames: bytes = wav.readframes(wav.getnframes())
+    return np.frombuffer(frames, dtype="<i2").astype(np.float32) / 32768.0
 
 
 class WhisperTranscriber:
@@ -23,7 +40,7 @@ class WhisperTranscriber:
 
             self._model = WhisperModel(self.model_name, device="cpu", compute_type=self.compute_type)
         segments: Any = self._model.transcribe(
-            str(audio),
+            read_wav(audio),
             language=None,
             multilingual=True,
             vad_filter=True,

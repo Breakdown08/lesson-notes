@@ -59,7 +59,16 @@ The tests are offline: recognition and the LLM are replaced by fakes, and test r
 - Tracks are assumed to start at the same moment; offsets are not corrected.
 - Two lessons on the same day are an error (the folder name is the date).
 - No automatic fallback to another LLM provider.
-- Recognition speed and quality on mixed Russian/French speech have not been measured yet.
+- Recognition quality on mixed Russian/French speech has not been scored against a reference transcript.
+
+## Measured
+
+First real lesson, 2026-11-18: a 1 h 19 min OBS recording, student on track 2, teacher on track 3, `large-v3-turbo` int8 on an Intel Core Ultra 7 155H (CPU only).
+
+- Wall time 1625 s (27 min) for both tracks plus the summary, about 0.34× real time; peak memory 5.2 GB (`/usr/bin/time`).
+- VAD dropped 60 min of silence from the student track and 25 min from the teacher track.
+- The transcript has 1112 teacher lines and 133 student lines; Russian and French lines alternate within one track.
+- Known defects seen by eye: mis-heard words in fast French, one repeated-phrase hallucination, and names spelled several ways. The summary marks unclear spots itself.
 
 ## License
 
