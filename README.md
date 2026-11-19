@@ -16,7 +16,7 @@ uv sync
 cp .env.example .env   # then edit the paths and the API key
 ```
 
-Whisper weights are downloaded from Hugging Face by faster-whisper on the first run. They are not pinned to a revision or checksum yet.
+Whisper weights are downloaded from Hugging Face by faster-whisper on the first run. The default `large-v3-turbo` is pinned to a revision, and its `model.bin` is checked against a SHA-256 before loading (`PINS` in `src/lesson_notes/transcribe.py`); a mismatch stops the run. Other model names load unpinned.
 
 ## Run
 
